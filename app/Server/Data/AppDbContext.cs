@@ -1,4 +1,4 @@
-using Mircrosoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using Server.Models;
 
 namespace Server.Data;
@@ -17,6 +17,7 @@ public class AppDbContext : DbContext
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         // Composite PKs — EF Core can't infer these by convention
+        // treats combination of userid and question/answer id as primary key
         modelBuilder.Entity<QuestionVote>()
             .HasKey(qv => new { qv.UserId, qv.QuestionId });
 
@@ -25,6 +26,7 @@ public class AppDbContext : DbContext
 
         // Circular reference fix — Question.BestAnswerId → Answer
         // Must be Restrict, not Cascade, to avoid a delete cycle
+        // must clear the best answer reference before deleting a question or answer
         modelBuilder.Entity<Question>()
             .HasOne<Answer>()
             .WithMany()
