@@ -1,0 +1,59 @@
+Project GameStack {
+  database_type: 'MySQL'
+  Note: 'Gaming community Q&A platform'
+}
+
+TablePartial base_fields {
+  id int [pk, increment]
+  created_at timestamp [default: `now()`, not null]
+  updated_at timestamp [default: `now()`, not null]
+}
+
+Table app_user {
+  ~base_fields
+  username varchar(50) [not null, unique]
+  email varchar(255) [not null, unique]
+  password_hash varchar(255) [not null]
+}
+
+Table question {
+  ~base_fields
+  user_id int [not null, ref: > app_user.id]
+  title varchar(255) [not null]
+  body text [not null]
+  best_answer_id int [null, ref: > answer.id]
+}
+
+Table answer {
+  ~base_fields
+  user_id int [not null, ref: > app_user.id]
+  question_id int [not null, ref: > question.id]
+  body text [not null]
+}
+
+Table comment {
+  ~base_fields
+  user_id int [not null, ref: > app_user.id]
+  answer_id int [not null, ref: > answer.id]
+  body text [not null]
+}
+
+Table question_vote {
+  user_id int [not null, ref: > app_user.id]
+  question_id int [not null, ref: > question.id]
+  value int [not null]
+
+  indexes {
+    (user_id, question_id) [pk]
+  }
+}
+
+Table answer_vote {
+  user_id int [not null, ref: > app_user.id]
+  answer_id int [not null, ref: > answer.id]
+  value int [not null]
+
+  indexes {
+    (user_id, answer_id) [pk]
+  }
+}
