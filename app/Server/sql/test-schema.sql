@@ -123,10 +123,10 @@ BEGIN
     (3, 'test_user3', 'user3@test.com', '$2a$10$hashhashhashhashhashhashhashhashhashhashhashhash3');
 
     -- ── Questions ──────────────────────────────────────────
-    INSERT INTO question (id, user_id, title, body, best_answer_id) VALUES
-    (1, 1, 'Test Question One',   'Body of test question one.',   NULL),
-    (2, 1, 'Test Question Two',   'Body of test question two.',   NULL),
-    (3, 2, 'Test Question Three', 'Body of test question three.', NULL);
+    INSERT INTO question (id, user_id, title, body, best_answer_id, created_at, updated_at) VALUES
+	(1, 1, 'Test Question One',   'Body of test question one.',   NULL, '2025-01-01 10:00:00', '2025-01-01 10:00:00'),
+	(2, 1, 'Test Question Two',   'Body of test question two.',   NULL, '2025-01-02 10:00:00', '2025-01-02 10:00:00'),
+	(3, 2, 'Test Question Three', 'Body of test question three.', NULL, '2025-01-03 10:00:00', '2025-01-03 10:00:00');
 
     -- ── Answers ────────────────────────────────────────────
     INSERT INTO answer (id, user_id, question_id, body) VALUES

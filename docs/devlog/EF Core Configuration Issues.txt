@@ -1,0 +1,25 @@
+# Dev Log — EF Core Configuration Issues
+
+## Error 1: Table name pluralization
+EF Core pluralizes DbSet names by default — looked for `questions` not `question`.
+Fix: add `.ToTable("question")` etc. in `OnModelCreating` for every table.
+
+## Error 2: Navigation property FK mismatch
+EF Core's convention expects FK named `{NavigationName}Id`. Our nav property is `Author`
+so it looked for `AuthorId` — but our FK is `UserId`. It created a shadow property that
+doesn't exist in the DB.
+Fix: explicitly configure with `.HasOne(q => q.Author).WithMany().HasForeignKey(q => q.UserId)`.
+Rule: if navigation name + "Id" doesn't equal the FK property name, configure it manually.
+
+## Error 3: snake_case vs PascalCase column names
+EF Core generates column names from C# property names (PascalCase). MySQL schema uses
+snake_case. `BestAnswerId` != `best_answer_id` even on case-insensitive MySQL because
+underscores are literal characters.
+Fix: install `EFCore.NamingConventions --version 9.0.0` and call
+`.UseSnakeCaseNamingConvention()` wherever AppDbContext is configured.
+Prevention: add this at project setup before writing any models.
+
+## Bonus: NuGet version targeting
+`dotnet add package EFCore.NamingConventions` grabbed v10.0.1 which targets .NET 10 only.
+Fix: always pin version to match your target framework — `--version 9.0.0` for .NET 9.
+Rule: EFCore.* and Pomelo.* packages version in lockstep with .NET.

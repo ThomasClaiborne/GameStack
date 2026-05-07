@@ -11,7 +11,10 @@ var connectionString = builder.Configuration
 
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseMySql(connectionString,
-        ServerVersion.AutoDetect(connectionString)));
+        ServerVersion.AutoDetect(connectionString))
+            .UseSnakeCaseNamingConvention());
+
+builder.Services.AddScoped<IQuestionRepository, EfQuestionRepository>();
 
 var app = builder.Build();
 
