@@ -29,7 +29,7 @@ Built as a full-stack pre-capstone project using the Neuberger Berman production
 
 | Layer      | Technology                              |
 |------------|-----------------------------------------|
-| Frontend   | Angular 19 (TypeScript)                 |
+| Frontend   | Angular 21 (TypeScript)                 |
 | Styling    | Bootstrap 5                             |
 | Backend    | ASP.NET Core Web API (.NET 9)           |
 | Database   | MySQL                                   |
