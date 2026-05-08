@@ -1,1 +1,4 @@
 @Server_HostAddress = http://localhost:5124
+
+
+GET {{Server_HostAddress}}/api/questions

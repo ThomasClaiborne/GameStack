@@ -4,6 +4,7 @@ using Moq;
 using Server.Data;
 using Server.Domain;
 using Server.Models;
+using Server.DTOs;
 
 public class QuestionServiceTest
 {
@@ -16,16 +17,19 @@ public class QuestionServiceTest
         _service = new QuestionService(_mockRepository.Object);
     }
 
-     [Fact]
+    [Fact]
     public async Task GetAllAsync_ShouldReturnSuccessWithQuestions()
     {
         // Arrange
         var fakeQuestions = new List<Question>
-        {
-            new Question { Id = 1, Title = "Test Question 1", Body = "Body 1", UserId = 1 },
-            new Question { Id = 2, Title = "Test Question 2", Body = "Body 2", UserId = 1 },
-            new Question { Id = 3, Title = "Test Question 3", Body = "Body 3", UserId = 2 }
-        };
+{
+        new Question { Id = 1, Title = "Test Question 1", Body = "Body 1", UserId = 1,
+            Author = new AppUser { Id = 1, Username = "test_user1" } },
+        new Question { Id = 2, Title = "Test Question 2", Body = "Body 2", UserId = 1,
+            Author = new AppUser { Id = 1, Username = "test_user1" } },
+        new Question { Id = 3, Title = "Test Question 3", Body = "Body 3", UserId = 2,
+            Author = new AppUser { Id = 2, Username = "test_user2" } }
+};
 
         _mockRepository.Setup(r => r.GetAllAsync())
             .ReturnsAsync(fakeQuestions);
@@ -36,6 +40,8 @@ public class QuestionServiceTest
         // Assert
         Assert.True(result.IsSuccess);
         Assert.Equal(3, result.Payload!.Count);
+        Assert.Equal("test_user1", result.Payload[0].AuthorUsername);
+        Assert.Equal("Test Question 1", result.Payload[0].Title);
     }
 
     [Fact]
